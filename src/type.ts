@@ -59,3 +59,9 @@ export type BrowserInfo = {
 };
 
 export type Compare = 'lte' | 'gte' | 'eq';
+
+export type BrowserRule = {
+  name: BrowserName;
+  rule: Compare;
+  version: string;
+};

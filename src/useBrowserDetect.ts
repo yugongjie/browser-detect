@@ -1,17 +1,9 @@
 import { browserRules, osRules, mobileRuleFirstQuery, mobileRuleSecondQuery } from './rules';
-import { BrowserInfo, BrowserName, Compare, OSName } from './type';
+import { BrowserInfo, BrowserName, BrowserRule, Compare, OSName } from './type';
 import { checkBrowser, checkOS, compareVersion } from './util';
 
 interface UseBrowserDetect {
-  (option: {
-    userAgent?: string;
-    browserRules?: {
-      name: BrowserName;
-      rule: Compare;
-      version: string;
-    }[];
-    OSRules?: OSName[];
-  }): {
+  (options?: { userAgent?: string; browserRules?: BrowserRule[]; OSRules?: OSName[] }): {
     browserInfo?: BrowserInfo | null;
     browserValid: boolean;
     OSValid: boolean;
@@ -67,7 +59,10 @@ const detectBrowserInfo = (userAgent?: string) => {
   return null;
 };
 
-const useBrowserDetect: UseBrowserDetect = ({ userAgent, browserRules = [], OSRules = [] }) => {
+const useBrowserDetect: UseBrowserDetect = options => {
+  const userAgent = options?.userAgent;
+  const browserRules = options?.browserRules || [];
+  const OSRules = options?.OSRules || [];
   // 获取浏览器的基本信息
   const browserInfo = detectBrowserInfo(userAgent);
   // 如果没有浏览器信息

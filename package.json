@@ -1,5 +1,5 @@
 {
-  "name": "browser-detect",
+  "name": "@hbtv/browser-detect",
   "version": "1.0.0",
   "description": "Library 创建工具模板",
   "main": "dist/index.js",
@@ -9,16 +9,18 @@
     "dist"
   ],
   "authors": {
-    "name": "",
-    "email": ""
+    "name": "gaojunyi",
+    "email": "yugongjie@gmail.com"
   },
-  "repository": "/browser-detect",
+  "repository": "https://gaojunyi@p2.hbtv.com.cn/src/scm/hbtvrc/browser-detect.git",
   "scripts": {
     "dev": "father doc dev",
     "build": "father build",
     "test": "jest"
   },
   "peerDependencies": {
+    "react": "16.x",
+    "antd":"^4.9.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

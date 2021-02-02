@@ -1,13 +1,10 @@
-import { BrowserInfo, BrowserName, Compare, OSName } from './type';
+import { BrowserInfo, BrowserName, BrowserRule, Compare, OSName } from './type';
 
 export const checkOS = (browserInfo: BrowserInfo, OSRules: OSName[]) => {
   return OSRules.includes(browserInfo.os);
 };
 
-export const checkBrowser = (
-  browserInfo: BrowserInfo,
-  browserRules: { name: BrowserName; rule: Compare; version: string }[],
-) => {
+export const checkBrowser = (browserInfo: BrowserInfo, browserRules: BrowserRule[]) => {
   return browserRules.every(item => {
     const { name, rule, version } = item;
 

@@ -2,13 +2,13 @@
 
 ## 安装方法
 
-`npm install @hbtv/use-browser-detect --save`
+`npm install @hbtv/browser-detect --save`
 
 ## 使用方法
 
 ```javascript
 
-import useBrowserDetect from '@hbtv/use-browser-detect'
+import useBrowserDetect from '@hbtv/browser-detect'
 const browserInfo=useBrowserDetect(option)
 ```
 
@@ -32,5 +32,16 @@ const browserInfo=useBrowserDetect(option)
 | error | 一些错误信息 | string | null
 
 #### BrowserInfo
+
 |  参数  |  说明  |  类型  |  默认值  |
 |  ---   |  ---  |  ---  |  ---  |
+
+## Acknowledgment
+
+[joo-browser-detect](https://github.com/shayanypn/joo-browser-detect)
+
+## LICENCE
+
+The MIT License (MIT)
+
+Copyright (c) 2021 yugongjie yugongjie@gmail.com
