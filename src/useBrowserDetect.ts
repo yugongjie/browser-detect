@@ -1,9 +1,26 @@
 import { browserRules, osRules, mobileRuleFirstQuery, mobileRuleSecondQuery } from './rules';
 import { BrowserInfo, BrowserName, BrowserRule, Compare, OSName } from './type';
 import { checkBrowser, checkOS, compareVersion } from './util';
-
+/**
+ * @param userAgent
+ * navigator.useAgent
+ * @param browserRules
+ * 浏览器检查
+ * @param OSRules
+ * 操作系统检查
+ * @param strict
+ * 严格检查模式
+ * 只允许声明的规则内的浏览器
+ *
+ *
+ */
 interface UseBrowserDetect {
-  (options?: { userAgent?: string; browserRules?: BrowserRule[]; OSRules?: OSName[] }): {
+  (options?: {
+    userAgent?: string;
+    browserRules?: BrowserRule[];
+    OSRules?: OSName[];
+    strict?: boolean;
+  }): {
     browserInfo?: BrowserInfo | null;
     browserValid: boolean;
     OSValid: boolean;
@@ -63,6 +80,7 @@ const useBrowserDetect: UseBrowserDetect = options => {
   const userAgent = options?.userAgent;
   const browserRules = options?.browserRules || [];
   const OSRules = options?.OSRules || [];
+  const strict = options?.strict || false;
   // 获取浏览器的基本信息
   const browserInfo = detectBrowserInfo(userAgent);
   // 如果没有浏览器信息
@@ -76,7 +94,7 @@ const useBrowserDetect: UseBrowserDetect = options => {
 
   return {
     browserInfo,
-    browserValid: browserRules ? checkBrowser(browserInfo, browserRules) : true,
+    browserValid: browserRules ? checkBrowser(browserInfo, browserRules, strict) : true,
     OSValid: OSRules ? checkOS(browserInfo, OSRules) : true,
   };
   // 如果没有浏览器和os列表则valid返回true

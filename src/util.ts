@@ -3,15 +3,24 @@ import { BrowserInfo, BrowserName, BrowserRule, Compare, OSName } from './type';
 export const checkOS = (browserInfo: BrowserInfo, OSRules: OSName[]) => {
   return OSRules.includes(browserInfo.os);
 };
-
-export const checkBrowser = (browserInfo: BrowserInfo, browserRules: BrowserRule[]) => {
+/**
+ *
+ * @param strict
+ * 开启严格模式时，必须是rules内的浏览器才通过检查
+ * 未开启严格模式时，今对rules内的进行检查，rules中没有的都可以通过
+ */
+export const checkBrowser = (
+  browserInfo: BrowserInfo,
+  browserRules: BrowserRule[],
+  strict: boolean = false,
+) => {
   return browserRules.every(item => {
     const { name, rule, version } = item;
 
     if (name === browserInfo.name) {
       return browserInfo.version ? rule === compareVersion(browserInfo.version, version) : false;
     }
-    return true;
+    return strict ? false : true;
   });
 };
 
