@@ -8,7 +8,7 @@ const browserInfo = {
   os: 'Linux',
 };
 
-describe('比较版本 compareVersion', () => {
+describe('compareVersion 比较版本', () => {
   test('主版本大', () => {
     expect(compareVersion('86.4.3', '85')).toBe('gte');
   });
@@ -30,7 +30,22 @@ describe('比较版本 compareVersion', () => {
   });
 });
 
-describe('浏览器检查 checkBrowser', () => {
+describe('compareVersion 参数不正确', () => {
+  test('当前版本为空', () => {
+    expect(compareVersion('', '85')).toBe('lte');
+  });
+  test('比较版本为空', () => {
+    expect(compareVersion('86.4.3', '')).toBe('gte');
+  });
+  test('当前版本无法数字化', () => {
+    expect(compareVersion('abc', '85')).toBe('lte');
+  });
+  test('比较版本无法数字化', () => {
+    expect(compareVersion('86.4.3', 'def')).toBe('gte');
+  });
+});
+
+describe('checkBrowser 浏览器严格模式检查', () => {
   test('宽松模式', () => {
     expect(
       checkBrowser(browserInfo, [
@@ -63,3 +78,7 @@ describe('浏览器检查 checkBrowser', () => {
     ).toBe(false);
   });
 });
+
+// describe('checkBrowser 参数不规范'，()=>{
+
+// })

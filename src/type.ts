@@ -2,6 +2,8 @@ export type BrowserName =
   | 'aol'
   | 'edge'
   | 'yandexbrowser'
+  | 'wechat'
+  | 'qq'
   | 'vivaldi'
   | 'kakaotalk'
   | 'samsung'
@@ -58,7 +60,7 @@ export type BrowserInfo = {
   os: OSName;
 };
 
-export type Compare = 'lte' | 'gte' | 'eq';
+export type Compare = 'lte' | 'gte' | 'eq' | 'ne' | 'ex';
 
 export type BrowserRule = {
   name: BrowserName;

@@ -1,6 +1,6 @@
-import { browserRules, osRules, mobileRuleFirstQuery, mobileRuleSecondQuery } from './rules';
-import { BrowserInfo, BrowserName, BrowserRule, Compare, OSName } from './type';
-import { checkBrowser, checkOS, compareVersion } from './util';
+import { BROWSER_RULES, OS_RULES, mobileRuleFirstQuery, mobileRuleSecondQuery } from './rules';
+import { BrowserInfo, BrowserRule, OSName } from './type';
+import { checkBrowser, checkOS } from './util';
 /**
  * @param userAgent
  * navigator.useAgent
@@ -29,15 +29,14 @@ interface UseBrowserDetect {
 }
 
 // TODO Bot
-const detectBot = () => {};
+// const detectBot = () => {};
 
-const detectMobile: (userAgent: string) => boolean = userAgent => {
-  return mobileRuleFirstQuery.test(userAgent) || mobileRuleSecondQuery.test(userAgent.substr(0, 4));
-};
+const detectMobile: (userAgent: string) => boolean = userAgent =>
+  mobileRuleFirstQuery.test(userAgent) || mobileRuleSecondQuery.test(userAgent.substr(0, 4));
 
 const detectOS = (userAgent: string) => {
-  const detected = osRules.filter(item => {
-    const [name, rule] = item;
+  const detected = OS_RULES.filter(item => {
+    const [, rule] = item;
     return rule && rule.test(userAgent);
   })[0];
   return detected ? detected[0] : 'unknown';
@@ -48,24 +47,22 @@ const detect: (userAgent: string) => BrowserInfo | null = userAgent => {
     return null;
   }
   return (
-    browserRules
-      .map(item => {
-        const [name, rule] = item;
-        const match = rule.exec(userAgent);
+    BROWSER_RULES.map(item => {
+      const [name, rule] = item;
+      const match = rule.exec(userAgent);
 
-        const versionNumber = match && match[1].split(/[._]/);
+      const versionNumber = match && match[1].split(/[._]/);
 
-        return (
-          match && {
-            bot: false,
-            mobile: detectMobile(userAgent),
-            name: name,
-            version: versionNumber?.join('.') || null,
-            os: detectOS(userAgent),
-          }
-        );
-      })
-      .filter(Boolean)[0] || null
+      return (
+        match && {
+          bot: false,
+          mobile: detectMobile(userAgent),
+          name,
+          version: versionNumber?.join('.') || null,
+          os: detectOS(userAgent),
+        }
+      );
+    }).filter(Boolean)[0] || null
   );
 };
 
@@ -77,6 +74,7 @@ const detectBrowserInfo = (userAgent?: string) => {
 };
 
 const useBrowserDetect: UseBrowserDetect = options => {
+  // eslint-disable-next-line prefer-destructuring
   const userAgent = options?.userAgent;
   const browserRules = options?.browserRules || [];
   const OSRules = options?.OSRules || [];
@@ -84,13 +82,14 @@ const useBrowserDetect: UseBrowserDetect = options => {
   // 获取浏览器的基本信息
   const browserInfo = detectBrowserInfo(userAgent);
   // 如果没有浏览器信息
-  if (!browserInfo)
+  if (!browserInfo) {
     return {
       browserInfo: null,
       browserValid: false,
       OSValid: false,
       error: '没有获取到浏览器信息',
     };
+  }
 
   return {
     browserInfo,

@@ -1,10 +1,11 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Modal, Typography } from 'antd';
+import { Typography, Modal } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { getLocalStorage, getSessionStorage, setLocalStorage, setSessionStorage } from './storage';
-import { InfoCircleOutlined, CheckOutlined } from '@ant-design/icons';
 import useBrowserDetect from './useBrowserDetect';
 import { BrowserRule, OSName } from './type';
 import { STORAGE_KEY } from './constance';
+import { DEFAULT_BROWSER_RULES } from './rules';
 
 const { Paragraph } = Typography;
 /**
@@ -26,22 +27,15 @@ type CheckMode = 'once' | 'onceBySession' | 'eachPage';
 interface BrowserDetectModalProps {
   onOk?: () => {};
   onCancel?: () => {};
-  // 自定义提示内容
-  content?: ReactNode;
-  // 自定义标题
-  title?: ReactNode;
-  // 浏览器规则
-  browserRules?: BrowserRule[];
-  // 操作系统规则
-  OSRules?: OSName[];
-  // 严格模式
-  strict?: boolean;
-  // 弹窗模式
-  modalMode?: ModalMode;
-  // 检查模式
-  checkMode?: CheckMode;
-  // 如果需要开启每页检查，需要传入此参数
-  pathname?: string;
+  content?: ReactNode; // 自定义提示内容
+  title?: ReactNode; // 自定义标题
+  browserRules?: BrowserRule[]; // 浏览器规则
+  OSRules?: OSName[]; // 操作系统规则
+  strict?: boolean; // 严格模式
+  modalMode?: ModalMode; // 弹窗模式
+  checkMode?: CheckMode; // 检查模式
+  location?: Location; // 如果需要开启每页检查，需要传入此参数
+  disable?: boolean; // 不启用检查
 }
 
 // 在浏览器不满足规则的情况下跳出
@@ -55,28 +49,29 @@ const BrowserDetectModal = (props: BrowserDetectModalProps) => {
     strict = false,
     modalMode = 'remind',
     checkMode = 'once',
-    pathname = '',
+    location,
+    disable = false,
   } = props;
-
+  const pathname = location?.pathname || '';
   const [visible, setVisible] = useState<boolean>(false);
   const { browserValid, OSValid, error } = useBrowserDetect({
-    browserRules,
+    browserRules: browserRules || DEFAULT_BROWSER_RULES,
     strict,
   });
   // 获取提示已读状态
   const getReaded = () => {
+    let readed = false;
     try {
       if (checkMode === 'once') {
-        return getLocalStorage(STORAGE_KEY) === 'readed';
+        readed = getLocalStorage(STORAGE_KEY) === 'readed';
       }
       if (checkMode === 'onceBySession') {
-        return getSessionStorage(STORAGE_KEY) === 'readed';
+        readed = getSessionStorage(STORAGE_KEY) === 'readed';
       }
     } catch (e) {
-      console.warn(e);
-      return false;
+      console.warn('error?', e);
     }
-    return false;
+    return readed;
   };
 
   // 设置提示已读状态
@@ -98,15 +93,16 @@ const BrowserDetectModal = (props: BrowserDetectModalProps) => {
     const shouldVisible = error || (!browserValid && !visible);
     // 每页检查模式
     // 不检查readed状态
+
     if (checkMode === 'eachPage') {
       if (shouldVisible) {
         setVisible(true);
       }
       return;
     }
+    const isRead = getReaded();
 
     // 检查readed状态
-    const isRead = getReaded();
     if (shouldVisible && !isRead) {
       setVisible(true);
     }
@@ -119,7 +115,6 @@ const BrowserDetectModal = (props: BrowserDetectModalProps) => {
     setVisible(false);
     if (onOk) {
       onOk();
-      return;
     }
   };
 
@@ -127,7 +122,6 @@ const BrowserDetectModal = (props: BrowserDetectModalProps) => {
     setVisible(false);
     if (onCancel) {
       onCancel();
-      return;
     }
   };
 
@@ -148,11 +142,19 @@ const BrowserDetectModal = (props: BrowserDetectModalProps) => {
             <li>
               您当前使用的浏览器版本过低
               <br /> 请下载最新版的
-              <a target="_blank" href="https://www.microsoft.com/zh-cn/edge">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.microsoft.com/zh-cn/edge"
+              >
                 edge浏览器
               </a>
               或者
-              <a target="_blank" href="https://www.google.cn/chrome/index.html">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.google.cn/chrome/index.html"
+              >
                 chrome浏览器
               </a>
             </li>
@@ -169,10 +171,12 @@ const BrowserDetectModal = (props: BrowserDetectModalProps) => {
         closable: false,
       };
     }
+    return null;
   })();
+
   return (
     <Modal
-      visible={visible}
+      visible={!disable && visible}
       title={
         title || (
           <>
