@@ -1,7 +1,7 @@
 {
   "name": "@hbtv/browser-detect",
-  "version": "1.0.0",
-  "description": "Library 创建工具模板",
+  "version": "1.0.1",
+  "description": "浏览器检查工具",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
