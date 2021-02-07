@@ -2,33 +2,35 @@
 
 ## 安装方法
 
-`npm install @hbtv/browser-detect --save`
+```bash
+npm install @hbtv/browser-detect --save
+```
 
-## 使用方法-`useBrowserDetect`
+## 使用方法-useBrowserDetect
 
 ```javascript
 import useBrowserDetect from '@hbtv/browser-detect'
-const browserInfo=useBrowserDetect(option)
+const {browserInfo,browserValid,OSvalid,error}=useBrowserDetect(option)
 ```
 
-### API-`useBrowserDetect`
+### API-useBrowserDetect
 
 ### Params
 
 |  参数  |  说明  |  类型  |  默认值  |
 |  ---   |  ---  |  ---  |  ---  |
-|  option  |    |  Option  | `undefined`  |
+|  option  |    |  Option |undefined  |
 
 ### Result
 
 |  参数  |  说明  |  类型  |  默认值  |
 |  ---   |  ---  |  ---  |  ---  |
-| browserInfo | 浏览器的信息 | BrowserInfo | |
-| browserValid | 是否通过browserRules的检查 | boolean | true
-| OSvalid | 是否通过OSRules的检查 | boolean | true
-| error | 一些错误信息 | string | null
+| browserInfo|浏览器的信息|BrowserInfo||
+| browserValid|是否通过browserRules的检查|boolean|true
+| OSvalid|是否通过OSRules的检查|boolean|true
+| error|一些错误信息|string|null
 
-## 使用方法-`BrowserDetectModal`
+## 使用方法-BrowserDetectModal
 
 ```javascript
 import BrowserDetectModal from '@hbtv/browser-detect'
@@ -39,10 +41,10 @@ const ShouleDetectBrowserComponent=()=>{
 
 ```
 
-### API-`BrowserDetectModal`
+### API-BrowserDetectModal
 
-|  参数  |  说明  |  类型  | 必填 | 默认值  |
-|  ---   |  ---  |  ---  |  ---  |  ---  |  |
+|  参数  |  说明  |  类型 |必填|默认值  |
+|  ---   |  ---  |  ---  |  ---  |  ---  |
 |  onOk  |  弹窗的ok回调  |  ()=>void  |  false  |  |
 |  onCancel  |  弹窗的cancel回调  |  ()=>void  |  false  |
 |  content  |  自定义提示内容  |  ReactNode  |  false  |  null  
@@ -52,12 +54,35 @@ const ShouleDetectBrowserComponent=()=>{
 |  strict  |  严格模式  |  strict  |  false  |  false  |
 |  modalMode  |  弹窗模式  |  ModalMode  |  fasle  |  remind  |
 |  checkMode  |  检查模式  |  CheckMode  |  false  |  once  |
-|  location  |  浏览器的location  |  Location  |  false  | null |
-|  disable  |  不启用检查  |  boolean  |  false  | false |
+|  location  |  浏览器的location  |  Location  |  false |null |
+|  disable  |  不启用检查  |  boolean  |  false | false |
 
 ## Interface & Type
 
 ```typescript
+
+type Compare = 'lte'|'gte'|'eq'|'ne'|'ex';
+
+type BrowserName = 'aol'|'edge'|'yandexbrowser'|'wechat'|'qq'|'vivaldi'|'kakaotalk'|'samsung'|'chrome'|'phantomjs'|'crios'|'firefox'|'fxios'|'opera'|'opera'|'ie'|'bb10'|'android'|'ios'|'safari'|'facebook'|'instagram'|'ios-webview'|'unknown';
+
+type OSName = 'iOS'|'Android OS'|'BlackBerry OS'|'Windows Mobile'|'Amazon OS'|'Windows 3.11'|'Windows 95'|'Windows 98'|'Windows 2000'|'Windows XP'|'Windows Server 2003'|'Windows Vista'|'Windows 7'|'Windows 8'|'Windows 8.1'|'Windows 10'|'Windows ME'|'Open BSD'|'Sun OS'|'Linux'|'Mac OS'|'QNX'|'BeOS'|'OS/2'|'Search Bot'|'unknown';
+
+type CheckMode = 'once'|'onceBySession'|'eachPage';
+/**
+ * @type once
+ * 仅第一次使用时进行检查
+ * @type onceBySession
+ * 每次打开会话时进行检查
+ * @type eachPage
+ * url变化时进行检查
+ */
+type ModalMode = 'remind'|'forcus';
+/**
+ * @type remind
+ * 仅提示，弹窗可观
+ * @type forcus
+ * 弹窗不可关闭
+ */
 
 interface Option{
     userAgent?: string; //navigator.useAgent
@@ -71,16 +96,6 @@ interface BrowserRule{
     rule: Compare; //比较规则
     version: string; //版本号
 }
-
-type Compare = 'lte' | 'gte' | 'eq' | 'ne' | 'ex';
-
-type BrowserName = 'aol' | 'edge' | 'yandexbrowser' | 'wechat' | 'qq' | 'vivaldi' | 'kakaotalk' | 'samsung' | 'chrome' | 'phantomjs' | 'crios' | 'firefox' | 'fxios' | 'opera' | 'opera' | 'ie' | 'bb10' | 'android' | 'ios' | 'safari' | 'facebook' | 'instagram' | 'ios-webview' | 'unknown';
-
-type OSName = 'iOS' | 'Android OS' | 'BlackBerry OS' | 'Windows Mobile' | 'Amazon OS' | 'Windows 3.11' | 'Windows 95' | 'Windows 98' | 'Windows 2000' | 'Windows XP' | 'Windows Server 2003' | 'Windows Vista' | 'Windows 7' | 'Windows 8' | 'Windows 8.1' | 'Windows 10' | 'Windows ME' | 'Open BSD' | 'Sun OS' | 'Linux' | 'Mac OS' | 'QNX' | 'BeOS' | 'OS/2' | 'Search Bot' | 'unknown';
-
-type CheckMode = 'once' | 'onceBySession' | 'eachPage';
-
-type ModalMode = 'remind' | 'forcus';
 
 ```
 
